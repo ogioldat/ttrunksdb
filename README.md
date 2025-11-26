@@ -8,77 +8,36 @@
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](.)
 [![Contributions](https://img.shields.io/badge/Contributions-Welcome-orange?style=flat-square)](CONTRIBUTING.md)
 
-**ttrunksdb** is an experimental write-intensive database engine inspired by ScyllaDB.
-## ✨ Key Features
+**ttrunksdb** is an experimental write-intensive LSM-based database engine inspired by ScyllaDB.
 
-- 🚀 **LSM Tree Architecture** - Optimized for high-volume writes
-- 💾 **Binary SSTable Format** - Efficient disk storage with bloom filters
-- 📊 **Data Generation** - Built-in realistic test data generator
-
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **Go 1.25+**
 - **Environment file** (copy from `.env.example`)
 
-### 1️⃣ Start the Database Server
+### Start the Database Server
 ```bash
 go run cmd/server/main.go
 ```
 *Launches TCP server on port 8080*
 
-### 2️⃣ Generate Test Data
+### Generate Test Data
 ```bash
 # Generate 5,000 realistic records
 go run cmd/datagen/main.go -n 5000 -size 128
 ```
 
-### 3️⃣ Interactive CLI
+### CLI
 ```bash
 go run cmd/cli/main.go
 ```
 
-**CLI Commands:**
-- `read <key>` - Retrieve value for key
-- `write <key> <value>` - Store key-value pair
-- `list` - Show all entries
-- `help` - Command reference
-- `quit` - Exit gracefully
-
-### 4️⃣ Debug SSTable Files
-```bash
-go run cmd/debug/deserialize_sstables.go
-```
-*Converts binary SSTables to human-readable text format*
-
----
-
-## 🛠️ Development Tools
-
-| Command | Description | Example |
-|---------|-------------|---------|
-| `cmd/server` | TCP database server | `go run cmd/server/main.go` |
-| `cmd/cli` | Interactive client | `go run cmd/cli/main.go` |
-| `cmd/datagen` | Data generator | `go run cmd/datagen/main.go -n 1000` |
-| `cmd/debug` | SSTable inspector | `go run cmd/debug/deserialize_sstables.go` |
-
-### 🎮 Data Generator Options
-```bash
-go run cmd/datagen/main.go [flags]
-  -n <number>     Records to generate (default: 1000)
-  -size <bytes>   Value size in bytes (default: 64)
-  -server <addr>  Server address (default: localhost:8080)
-```
-
----
-
-## 🔧 SSTable Binary Format
+## SSTable format
 
 Our custom binary format optimizes for both storage efficiency and read performance:
 
-### Header Section
+### Header
 ```
 [4 bytes]   bloom filter size (int32)
 [N bytes]   bloom filter bits (string)
@@ -86,7 +45,7 @@ Our custom binary format optimizes for both storage efficiency and read performa
 [M bytes]   sparse index data (string)
 ```
 
-### Data Records
+### Data Record
 ```
 [4 bytes]   key length (int32)
 [N bytes]   key data (string)
@@ -100,20 +59,17 @@ Our custom binary format optimizes for both storage efficiency and read performa
 
 *All integers encoded in little-endian byte order*
 
-📋 **[Detailed Binary Layout Specification →](data/README.md)**
+**[Detailed Binary Layout Specification →](data/README.md)**
 
----
 
 ### Running Tests
 ```bash
 go test ./...
 ```
 
----
-
 ## 📋 Development Roadmap
 
-### ✅ Completed Features
+### Features
 - [x] **Memtable writes** - In-memory write buffer with efficient operations
 - [x] **Memtable reads** - Fast in-memory key-value lookups
 - [x] **Binary SSTable writes** - Efficient disk serialization with headers
@@ -123,7 +79,7 @@ go test ./...
 - [x] **Database server** - TCP server with JSON protocol
 - [x] **Debug tools** - SSTable inspection and visualization utilities
 
-### 🚧 TODO
+### WIP Features
 - [ ] **Compaction engine** - Background SSTable merging and optimization
 - [ ] **Multi-level SSTables** - Tiered storage for better performance
 - [ ] **WAL recovery** - Write-ahead logging for crash consistency
@@ -135,11 +91,7 @@ go test ./...
 - [ ] **Metrics & monitoring** - Prometheus integration and runtime statistics
 - [ ] **Distributed deployment** - Multi-node clustering support
 
----
-
-## 📚 Inspiration & References
+## Refs
 
 - **[ScyllaDB](https://www.scylladb.com/)** - LSM tree implementation insights
 - **[RocksDB](https://rocksdb.org/)** - LSM storage engine design patterns
-
----
