@@ -10,34 +10,31 @@
 
 **ttrunksdb** is an experimental write-intensive LSM-based database engine inspired by ScyllaDB.
 
-## Quick Start
+## quick start
 
-### Prerequisites
+### required tech
 - **Go 1.25+**
 - **Environment file** (copy from `.env.example`)
 
-### Start the Database Server
+### server
 ```bash
 go run cmd/server/main.go
 ```
-*Launches TCP server on port 8080*
 
-### Generate Test Data
+### test data gen
 ```bash
 # Generate 5,000 realistic records
 go run cmd/datagen/main.go -n 5000 -size 128
 ```
 
-### CLI
+### client
 ```bash
 go run cmd/cli/main.go
 ```
 
-## SSTable format
+## binary data layout
 
-Our custom binary format optimizes for both storage efficiency and read performance:
-
-### Header
+### header
 ```
 [4 bytes]   bloom filter size (int32)
 [N bytes]   bloom filter bits (string)
@@ -45,7 +42,7 @@ Our custom binary format optimizes for both storage efficiency and read performa
 [M bytes]   sparse index data (string)
 ```
 
-### Data Record
+### data
 ```
 [4 bytes]   key length (int32)
 [N bytes]   key data (string)
@@ -62,24 +59,8 @@ Our custom binary format optimizes for both storage efficiency and read performa
 **[Detailed Binary Layout Specification →](data/README.md)**
 
 
-### Running Tests
-```bash
-go test ./...
-```
+## missing parts
 
-## 📋 Development Roadmap
-
-### Features
-- [x] **Memtable writes** - In-memory write buffer with efficient operations
-- [x] **Memtable reads** - Fast in-memory key-value lookups
-- [x] **Binary SSTable writes** - Efficient disk serialization with headers
-- [x] **SSTable reads** - Sparse index and bloom filter optimized lookups
-- [x] **L0 SSTables** - Level 0 storage implementation
-- [x] **CLI client** - Interactive terminal interface with Bubble Tea
-- [x] **Database server** - TCP server with JSON protocol
-- [x] **Debug tools** - SSTable inspection and visualization utilities
-
-### WIP Features
 - [ ] **Compaction engine** - Background SSTable merging and optimization
 - [ ] **Multi-level SSTables** - Tiered storage for better performance
 - [ ] **WAL recovery** - Write-ahead logging for crash consistency
@@ -91,7 +72,7 @@ go test ./...
 - [ ] **Metrics & monitoring** - Prometheus integration and runtime statistics
 - [ ] **Distributed deployment** - Multi-node clustering support
 
-## Refs
+## refs
 
 - **[ScyllaDB](https://www.scylladb.com/)** - LSM tree implementation insights
 - **[RocksDB](https://rocksdb.org/)** - LSM storage engine design patterns
